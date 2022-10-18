@@ -36,12 +36,7 @@ const ProgressBar = ({ value, size }) => {
         role="progressbar"
       >
         <VisuallyHidden>LEARNING PROGRESS</VisuallyHidden>
-        <ProgressWrapper
-          style={{
-            overflow: 'hidden',
-            borderRadius: '4px',
-          }}
-        >
+        <ProgressWrapper>
           <Progress value={value} />
         </ProgressWrapper>
       </Wrapper>
@@ -52,19 +47,17 @@ const ProgressBar = ({ value, size }) => {
 export default ProgressBar;
 
 const Wrapper = styled('div')`
-  & {
-    box-shadow: inset 0px 2px 4px ${COLORS.transparentGray35};
-    background-color: ${COLORS.transparentGray15};
-    height: var(--height);
-    border-radius: var(--bar-radius);
-    overflow: hidden;
-    padding: var(--padding);
-  }
+  box-shadow: inset 0px 2px 4px ${COLORS.transparentGray35};
+  background-color: ${COLORS.transparentGray15};
+  height: var(--height);
+  border-radius: var(--bar-radius);
+  overflow: hidden;
+  padding: var(--padding);
 `;
 
 const ProgressWrapper = styled('div')`
   overflow: hidden;
-  border-radius: '4px';
+  border-radius: 4px;
 `;
 
 const Progress = styled('div')`
