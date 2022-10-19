@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { COLORS } from '../../constants';
 import Icon from '../Icon';
@@ -6,60 +6,64 @@ import { getDisplayedValue } from './Select.helpers';
 
 const Select = ({ label, value, onChange, children }) => {
   const displayedValue = getDisplayedValue(value, children);
-  const [width, setWidth] = useState('auto');
 
-  useEffect(() => {
-    const tempNode = document.createElement('div');
-    document.body.appendChild(tempNode);
-    tempNode.textContent = displayedValue;
-    tempNode.style.width = 'fit-content';
-    setWidth(tempNode.clientWidth);
-    document.body.removeChild(tempNode);
-  }, [displayedValue]);
   return (
     <Wrapper>
-      <SelectWrapper
-        value={value}
-        onChange={onChange}
-        style={{ '--width': width + 'px' }}
-      >
+      <SelectWrapper value={value} onChange={onChange}>
         {children}
       </SelectWrapper>
-      <SelectIcon id="chevron-down" size="20" strokeWidth="2" />
+      <Presentational>
+        {displayedValue}
+        <IconWrapper style={{ '--width': 24 + 'px' }}>
+          <Icon id="chevron-down" size="24" strokeWidth="2" />
+        </IconWrapper>
+      </Presentational>
     </Wrapper>
   );
 };
+
+const SelectWrapper = styled('select')`
+  opacity: 0;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+`;
+
+const Presentational = styled('div')`
+  background-color: ${COLORS.transparentGray15};
+  border-radius: 8px;
+  border: none;
+  padding: 12px 52px 12px 16px;
+  color: ${COLORS.gray700};
+  font-weight: 400;
+  /* postion: relative; */
+
+  ${SelectWrapper}:focus + & {
+    outline: 1px auto -webkit-focus-ring-color;
+  }
+
+  ${SelectWrapper}:hover + & {
+    color: ${COLORS.black};
+  }
+`;
 
 const Wrapper = styled('div')`
   position: relative;
   width: fit-content;
 `;
 
-//TODO use margin auto trick to align center;
-const SelectIcon = styled(Icon)`
+/**
+ * Instead of composing <Icon />, use wrapper for the Icon instead
+ */
+const IconWrapper = styled('div')`
   position: absolute;
   top: 0;
   bottom: 0;
   right: 10px;
   margin: auto;
-  color: ${COLORS.gray700};
   pointer-events: none;
-`;
-
-const SelectWrapper = styled('select')`
-  -webkit-appearance: none;
-  appearance: none;
-  background-color: ${COLORS.transparentGray15};
-  border-radius: 8px;
-  border: none;
-  padding: 12px 12px 12px 16px;
-  color: ${COLORS.gray700};
-  font-weight: 400;
-  width: calc(var(--width) + 50px); // add 50px buffer
-
-  &:hover {
-    color: ${COLORS.black};
-  }
+  width: var(--width);
+  height: var(--width);
 `;
 
 export default Select;
